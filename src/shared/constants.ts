@@ -1,12 +1,15 @@
 import { TextProps } from "@visx/text";
 
+import { CityColors } from "./types";
+
 export const COLORS = {
     blue: "#4299E1",
     green: "#68D391",
     purple: "#6B46C1",
+    lightGray: "#CBD5E0",
     gray: "#A0AEC0",
     black: "#262626",
-    white: "#F7FAFC"
+    white: "#ffffff"
 }
 
 export const MARGINS = {
@@ -31,3 +34,9 @@ export const AXIS_LABEL_PROPS: Partial<TextProps> = {
   fontSize: 10,
   textAnchor: "middle",
 };
+
+export const CITY_COLORS: CityColors = {
+    "New York": COLORS.green,
+    "San Francisco": COLORS.blue,
+    Austin: COLORS.purple,
+  };

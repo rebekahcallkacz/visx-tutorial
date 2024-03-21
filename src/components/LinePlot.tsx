@@ -12,27 +12,13 @@ import {
   PLOT_DIMENSIONS,
   PLOT_INNER_DIMENSIONS,
   AXIS_LABEL_PROPS,
+  CITY_COLORS,
 } from "../shared/constants";
+import { CityTemperature, CityColors, City } from "../shared/types";
 
-interface CityTemperature {
-  date: string;
-  "New York": string;
-  "San Francisco": string;
-  Austin: string;
-}
+type LinePlotProps = { primaryCity: City };
 
-type CityTemperatureColors = Pick<
-  CityTemperature,
-  "Austin" | "New York" | "San Francisco"
->;
-
-const CITY_COLORS: CityTemperatureColors = {
-  Austin: COLORS.blue,
-  "New York": COLORS.green,
-  "San Francisco": COLORS.purple,
-};
-
-export const LinePlot = () => {
+export const LinePlot = ({ primaryCity }: LinePlotProps) => {
   // X SCALE SETUP
   const xMin = new Date("2011-10-01").valueOf();
   const xMax = new Date("2012-09-30").valueOf();
@@ -65,7 +51,7 @@ export const LinePlot = () => {
             yScale={yScale}
             width={PLOT_INNER_DIMENSIONS.width}
             height={PLOT_INNER_DIMENSIONS.height}
-            stroke={COLORS.gray}
+            stroke={COLORS.lightGray}
           />
           <AxisBottom
             scale={xScale}
@@ -82,21 +68,19 @@ export const LinePlot = () => {
             stroke={COLORS.black}
             tickStroke={COLORS.black}
           />
-          {(Object.keys(CITY_COLORS) as Array<keyof CityTemperatureColors>).map(
-            (city) => (
-              <LinePath<CityTemperature>
-                key={`${city}`}
-                curve={curveLinear}
-                data={cityTemperature}
-                x={(datum) => xScale(new Date(datum.date).valueOf())}
-                y={(datum) => yScale(Number(datum[city]))}
-                stroke={CITY_COLORS[city]}
-                strokeWidth={2}
-                strokeOpacity={0.7}
-                shapeRendering="geometricPrecision"
-              />
-            )
-          )}
+          {(Object.keys(CITY_COLORS) as Array<keyof CityColors>).map((city) => (
+            <LinePath<CityTemperature>
+              key={`${city}`}
+              curve={curveLinear}
+              data={cityTemperature}
+              x={(datum) => xScale(new Date(datum.date).valueOf())}
+              y={(datum) => yScale(Number(datum[city]))}
+              stroke={city === primaryCity ? CITY_COLORS[city] : COLORS.gray}
+              strokeWidth={2}
+              strokeOpacity={city === primaryCity ? 1 : 0.7}
+              shapeRendering="geometricPrecision"
+            />
+          ))}
         </Group>
       </svg>
     </>
